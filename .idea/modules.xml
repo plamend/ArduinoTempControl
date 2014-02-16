@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectModuleManager">
-    <modules />
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ArduinoTempControl.iml" filepath="$PROJECT_DIR$/ArduinoTempControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" filepath="$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" />
+    </modules>
   </component>
 </project>
 
