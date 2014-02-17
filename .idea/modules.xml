@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ArduinoTempControl.iml" filepath="$PROJECT_DIR$/ArduinoTempControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArduinoTempControl.iml" filepath="$PROJECT_DIR$/ArduinoTempControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" filepath="$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" />
       <module fileurl="file://$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" filepath="$PROJECT_DIR$/arduinotempcontrol/arduinotempcontrol.iml" />
     </modules>
   </component>
