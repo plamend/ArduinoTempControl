@@ -6,6 +6,7 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
 
@@ -44,7 +45,7 @@ public class ServerInterfaceCom implements ServerInterface {
     }
 
     @Override
-    public void getInputList(InputListcallback callback) {
+    public void getInputList(final InputListcallback callback) {
 
         String url = buildURL(BASE_URL,action,feedid,inputName,inputValue,BASE_API);
         this.client.get(url,null,new AsyncHttpResponseHandler(){
@@ -56,6 +57,7 @@ public class ServerInterfaceCom implements ServerInterface {
                     JSONArray inputarray = new JSONArray(content);
                     List<inputObject> listInput = parceInputList(inputarray);
                     Log.v("parce","0");
+                    callback.onSuccess(listInput);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -119,8 +121,45 @@ public class ServerInterfaceCom implements ServerInterface {
     }
 
     @Override
-    public void getFeedsList(FeedsListcallback callback) {
+    public void getFeedsList(final FeedsListcallback callback) {
+        String url = buildURL(BASE_URL,action,feedid,inputName,inputValue,BASE_API);
+        this.client.get(url,null,new AsyncHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+               String out = new String(responseBody);
+                try {
+                    JSONArray inputarray = new JSONArray(out);
+                    List<feedObject> feedlist = parceFeeds(inputarray);
+                    callback.onSuccess(feedlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                super.onFailure(statusCode, headers, responseBody, error);
+            }
+        });
+    }
+
+    private List<feedObject> parceFeeds(JSONArray inputarray) throws JSONException {
+        List<feedObject> tempList = new ArrayList<feedObject>();
+
+        for(int i=0;i<inputarray.length();i++){
+            feedObject tempFeedItem = new feedObject();
+            JSONObject c = inputarray.getJSONObject(i);
+            tempFeedItem.setName((String) c.get("name"));
+            tempFeedItem.setId(Integer.valueOf((String) c.get("id")));
+            tempFeedItem.setTag((String)c.get("tag"));
+            tempFeedItem.setPub((String) c.get("public"));
+            if (c.get("public")=="public"){
+            tempList.add(tempFeedItem);
+            }
+        }
+            // Log.v("parce","0");
+
+        return tempList;
     }
 
     @Override
