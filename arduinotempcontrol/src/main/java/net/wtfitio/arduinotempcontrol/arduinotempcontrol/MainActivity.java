@@ -4,14 +4,17 @@ import android.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.FirstLoginSet;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.ToolsListFragment;
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.Implemet.ServerInterfaceCom;
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
 
 public class MainActivity extends ActionBarActivity implements ToolsListFragment.onItemClick,FirstLoginSet.onContinueClickListener {
-
+    private ServerInterface http;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +25,23 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FirstLoginSet())
                     .commit();
+            httprecuest();
         }
+    }
+
+    private void httprecuest() {
+        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed","7",null,null,null);
+        this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
+            @Override
+            public void onSuccess(String value) {
+                Log.v("outputjjjjjjjj", value);
+            }
+
+            @Override
+            public void onFailure(String message, Throwable cause) {
+
+            }
+        });
     }
 
 

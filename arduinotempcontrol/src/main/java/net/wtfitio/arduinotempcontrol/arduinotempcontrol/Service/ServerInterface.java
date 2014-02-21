@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ServerInterface {
     void getInputList(InputListcallback callback);
-    void getFeedsList(FeedsListcalback callback);
+    void getFeedsList(FeedsListcallback callback);
     void getFeedValue(FeedValumecallback callback);
 
     public interface InputListcallback {
@@ -18,13 +18,13 @@ public interface ServerInterface {
         void onFailure(String message, Throwable cause);
     }
 
-    public interface FeedsListcalback {
+    public interface FeedsListcallback {
         void onSuccess(List<feedObject> feed);
         void onFailure(String message, Throwable cause);
     }
 
     public interface FeedValumecallback {
-        void onSuccess(int value);
+        void onSuccess(String value);
         void onFailure(String message, Throwable cause);
     }
 
