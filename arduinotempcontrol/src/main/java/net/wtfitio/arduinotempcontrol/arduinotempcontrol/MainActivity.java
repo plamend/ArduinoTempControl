@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.FirstLoginSet;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.ToolsListFragment;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.Implemet.ServerInterfaceCom;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
+
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements ToolsListFragment.onItemClick,FirstLoginSet.onContinueClickListener {
     private ServerInterface http;
@@ -25,12 +28,29 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FirstLoginSet())
                     .commit();
-            httprecuest();
+            httprecuest("7");
+            httprequestinputlist();
         }
     }
 
-    private void httprecuest() {
-        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed","7",null,null,null);
+    private void httprequestinputlist() {
+        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","input",null,null,null,"f8e040407f8b595df79322fa883641fd");
+        this.http.getInputList(new ServerInterface.InputListcallback(){
+            @Override
+            public void onSuccess(List<inputObject> input) {
+
+            }
+
+            @Override
+            public void onFailure(String message, Throwable cause) {
+
+            }
+        });
+
+    }
+
+    private void httprecuest(String feedid) {
+        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed",feedid,null,null,"f8e040407f8b595df79322fa883641fd");
         this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
             @Override
             public void onSuccess(String value) {

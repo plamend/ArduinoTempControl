@@ -1,16 +1,23 @@
 package net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.Implemet;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by plamend on 2/20/14.
@@ -44,7 +51,14 @@ public class ServerInterfaceCom implements ServerInterface {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String content = new String(responseBody);
-
+                Log.v("inputlistttt",content);
+                try {
+                    JSONArray inputarray = new JSONArray(content);
+                    List<inputObject> listInput = parceInputList(inputarray);
+                    Log.v("parce","0");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -57,26 +71,38 @@ public class ServerInterfaceCom implements ServerInterface {
 
     }
 
+    private List<inputObject> parceInputList(JSONArray inputarray) throws JSONException {
+        List<inputObject> tempList = new ArrayList<inputObject>();
 
+        for(int i=0;i<inputarray.length();i++){
+            inputObject tempInputItem = new inputObject();
+            JSONObject c = inputarray.getJSONObject(i);
+            tempInputItem.setName((String) c.get("name"));
+            tempInputItem.setDescription((String) c.get("description"));
+           // Log.v("parce","0");
+            tempList.add(tempInputItem);
+        }
 
-
+        return tempList;
+    }
 
 
     private String buildURL(String base_url, String action, String feedid, String inputName, String inputValue, String base_api) {
         Uri.Builder ub = Uri.parse(base_url).buildUpon();
         if (action.equals("feed")){
-            ub.appendPath(action);
+            ub.appendEncodedPath(action);
             if(feedid==null){
-                ub.appendPath("list.json");
+                ub.appendEncodedPath("list.json");
             }
             else{
-                ub.appendPath("value.json?id="+feedid);
+                ub.appendEncodedPath("value.json?id=" + feedid);
+                //ub.appendPath("value.json?id="+feedid);
             }
         }
         if(action.equals("input")){
-            ub.appendPath(action);
+            ub.appendEncodedPath(action);
             if(inputName==null){
-                ub.appendPath("list.json");
+                ub.appendEncodedPath("list.json");
             }
             else{
                 try {
@@ -87,7 +113,7 @@ public class ServerInterfaceCom implements ServerInterface {
             }
 
         }
-        ub.appendPath("&apikey="+base_api);
+       ub.appendEncodedPath("&apikey=" + base_api);
         String url = ub.build().toString();
         return url;
     }
@@ -104,6 +130,7 @@ public class ServerInterfaceCom implements ServerInterface {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                String out = new String(responseBody);
+                out=out.substring(1,3);
                 callback.onSuccess(out);
 
             }
