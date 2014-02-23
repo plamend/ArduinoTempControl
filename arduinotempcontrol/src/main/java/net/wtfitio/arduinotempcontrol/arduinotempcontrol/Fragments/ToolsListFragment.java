@@ -3,13 +3,17 @@ package net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.R;
+
+import java.util.List;
 
 /**
  * Created by plamend on 2/17/14.
@@ -17,12 +21,16 @@ import net.wtfitio.arduinotempcontrol.arduinotempcontrol.R;
 public class ToolsListFragment extends Fragment {
     private onItemClick onItemClick;
     ListView list;
+    static List<feedObject> feedlist;
    public interface onItemClick {
         void toolsFragmentItemSelected(int position);
     }
 
-    public static ToolsListFragment getinstance(){
+    public static ToolsListFragment getinstance(List<feedObject> feedsList){
+        feedlist=feedsList;
       ToolsListFragment fragment = new ToolsListFragment();
+
+
 
         return fragment;
     }
@@ -42,7 +50,7 @@ public class ToolsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main,container,false);
         this.list = (ListView)view.findViewById(R.id.list);
-
+           Log.v("done", "Done");
 
         return view;
     }

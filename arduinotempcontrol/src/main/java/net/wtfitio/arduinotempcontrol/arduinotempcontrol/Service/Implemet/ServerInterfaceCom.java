@@ -11,10 +11,16 @@ import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
 
 import org.apache.http.Header;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -30,7 +36,7 @@ public class ServerInterfaceCom implements ServerInterface {
     private String feedid;
     private String inputName;
     private String inputValue;
-
+    private HttpClient http;
     private AsyncHttpClient client;
     public ServerInterfaceCom(String url,String action,String feedid,String inputName,String inputValue,String api){
         this.BASE_URL=url;
@@ -39,28 +45,37 @@ public class ServerInterfaceCom implements ServerInterface {
         this.inputName=inputName;
         this.inputValue=inputValue;
         this.BASE_API=api;
+        http = new DefaultHttpClient();
         this.client=new AsyncHttpClient();
-        this.client.setTimeout(1000);
-        this.client.setMaxRetriesAndTimeout(1,200);
+
+        this.client.setMaxRetriesAndTimeout(2,1000);
     }
 
     @Override
     public void getInputList(final InputListcallback callback) {
 
         String url = buildURL(BASE_URL,action,feedid,inputName,inputValue,BASE_API);
-        this.client.get(url,null,new AsyncHttpResponseHandler(){
+
+         this.client.get(url,null,new AsyncHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String content = new String(responseBody);
                 Log.v("inputlistttt",content);
+
+                JSONArray inputarray = null;
+
+
+
                 try {
-                    JSONArray inputarray = new JSONArray(content);
+                    inputarray = new JSONArray(content);
                     List<inputObject> listInput = parceInputList(inputarray);
                     Log.v("parce","0");
                     callback.onSuccess(listInput);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
 
             }
 
@@ -122,7 +137,7 @@ public class ServerInterfaceCom implements ServerInterface {
 
     @Override
     public void getFeedsList(final FeedsListcallback callback) {
-        String url = buildURL(BASE_URL,action,feedid,inputName,inputValue,BASE_API);
+        String url = buildURL(BASE_URL, action, feedid, inputName, inputValue, BASE_API);
         this.client.get(url,null,new AsyncHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -138,7 +153,7 @@ public class ServerInterfaceCom implements ServerInterface {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                super.onFailure(statusCode, headers, responseBody, error);
+              Log.v("error","0");
             }
         });
     }
@@ -152,12 +167,14 @@ public class ServerInterfaceCom implements ServerInterface {
             tempFeedItem.setName((String) c.get("name"));
             tempFeedItem.setId(Integer.valueOf((String) c.get("id")));
             tempFeedItem.setTag((String)c.get("tag"));
-            tempFeedItem.setPub((String) c.get("public"));
-            if (c.get("public")=="public"){
+            tempFeedItem.setPub(c.getBoolean("public"));
+            if(c.getBoolean("public")==true){
             tempList.add(tempFeedItem);
             }
         }
-            // Log.v("parce","0");
+             Log.v("parce","0");
+
+
 
         return tempList;
     }

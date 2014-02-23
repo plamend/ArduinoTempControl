@@ -9,7 +9,7 @@ public class feedObject  implements Serializable{
     private int id;
     private String name;
     private String tag;
-    private String pub;
+    private boolean pub;
 
     public void setId(int id) {
         this.id = id;
@@ -19,7 +19,7 @@ public class feedObject  implements Serializable{
         this.name = name;
     }
 
-    public void setPub(String pub) {
+    public void setPub(boolean pub) {
         this.pub = pub;
     }
 
@@ -38,7 +38,7 @@ public class feedObject  implements Serializable{
     public String getTag() {
         return tag;
     }
-    public String setPub(){
+    public boolean setPub(){
         return pub;
     }
 

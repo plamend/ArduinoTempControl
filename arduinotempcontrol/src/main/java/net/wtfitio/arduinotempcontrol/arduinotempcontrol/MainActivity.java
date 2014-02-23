@@ -1,13 +1,17 @@
 package net.wtfitio.arduinotempcontrol.arduinotempcontrol;
 
 import android.app.FragmentManager;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Adapters.inputListAdapter;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.FirstLoginSet;
@@ -20,34 +24,58 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements ToolsListFragment.onItemClick,FirstLoginSet.onContinueClickListener {
     private ServerInterface http;
-    List<inputObject> inputList;
+    List<inputObject>inputList ;
     List<feedObject> feedsList;
+    inputListAdapter inputadapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.inputList = new ArrayList<inputObject>();
+        this.inputList=new ArrayList<inputObject>();
         this.feedsList = new ArrayList<feedObject>();
+
         if (savedInstanceState == null) {
-          ToolsListFragment toolsfragment=ToolsListFragment.getinstance();
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FirstLoginSet())
                     .commit();
 
-            httprecuest("7");
-            httprequestinputlist();
-            httprequestfeedslist();
-            Log.v("doen","1");
+
+
+
+
 
         }
     }
+    private void httprequestinputlist(){
 
+        ServerInterfaceCom http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/", "input", null, null, null, "f8e040407f8b595df79322fa883641fd");
+
+        http.getInputList(new ServerInterface.InputListcallback() {
+            @Override
+            public void onSuccess(List<inputObject> input) {
+                addToVarInput(input);
+                Log.v("","");
+                CallMainScree(feedsList);
+
+            }
+
+            @Override
+            public void onFailure(String message, Throwable cause) {
+
+            }
+
+        });
+
+
+    }
     private void httprequestfeedslist() {
         this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed",null,null,null,"f8e040407f8b595df79322fa883641fd");
         this.http.getFeedsList(new ServerInterface.FeedsListcallback(){
             @Override
             public void onSuccess(List<feedObject> feed) {
-                feedsList=feed;
+                addToVarFeed(feed);
+                httprequestinputlist();
             }
 
             @Override
@@ -56,24 +84,6 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             }
         });
     }
-
-    private void httprequestinputlist() {
-        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","input",null,null,null,"f8e040407f8b595df79322fa883641fd");
-
-        this.http.getInputList(new ServerInterface.InputListcallback(){
-            @Override
-            public void onSuccess(List<inputObject> input) {
-            MainActivity.this.inputList=input;
-            }
-
-            @Override
-            public void onFailure(String message, Throwable cause) {
-
-            }
-        });
-
-    }
-
     private void httprecuest(String feedid) {
         this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed",feedid,null,null,"f8e040407f8b595df79322fa883641fd");
         this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
@@ -84,10 +94,22 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
             @Override
             public void onFailure(String message, Throwable cause) {
-
+                Log.v("outputjjjjjjjj", "erroro");
             }
         });
     }
+    private void addToVarFeed(List<feedObject> feed) {
+        feedsList=feed;
+
+    }
+
+
+    private void addToVarInput(List<inputObject> input) {
+
+     inputList=input;
+    }
+
+
 
 
     @Override
@@ -120,7 +142,22 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     @Override
     public void firstLoginSetonContinueClicked(String server, String api) {
 
-        ToolsListFragment toolsfragment=ToolsListFragment.getinstance();
-       getSupportFragmentManager().beginTransaction().replace(R.id.container,toolsfragment).commit();
+
+       // httprecuest("7");
+
+        httprequestfeedslist();
+
+
+
+
+
+
+    }
+
+    private void CallMainScree(List<feedObject> feedsList) {
+        ToolsListFragment toolsfragment=ToolsListFragment.getinstance(feedsList);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,toolsfragment).commit();
+        Log.v("done","main screen Srated");
     }
 }
+
