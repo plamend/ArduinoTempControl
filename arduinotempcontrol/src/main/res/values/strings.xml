@@ -8,5 +8,6 @@
     <string name="set_api">Set API key string</string>
     <string name="button_continue">Continue</string>
     <string name="first_set_error">Enter info in all lines!</string>
+    <string name="feed_id">ID:</string>
 
 </resources>

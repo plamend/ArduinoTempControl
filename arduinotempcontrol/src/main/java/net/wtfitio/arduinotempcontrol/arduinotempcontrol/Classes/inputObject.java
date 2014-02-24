@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class inputObject implements Serializable {
     private String name;
     private String description;
+    private String sendUrl;
 
     public void setName(String name) {
         this.name = name;
@@ -23,5 +24,13 @@ public class inputObject implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setSendUrl(String sendUrl) {
+        this.sendUrl = sendUrl;
+    }
+
+    public String getSendUrl() {
+        return sendUrl;
     }
 }

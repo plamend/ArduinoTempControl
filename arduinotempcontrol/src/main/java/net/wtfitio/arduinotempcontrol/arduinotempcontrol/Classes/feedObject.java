@@ -10,6 +10,7 @@ public class feedObject  implements Serializable{
     private String name;
     private String tag;
     private boolean pub;
+    private String getUrl;
 
     public void setId(int id) {
         this.id = id;
@@ -42,4 +43,11 @@ public class feedObject  implements Serializable{
         return pub;
     }
 
+    public void setGetUrl(String getUrl) {
+        this.getUrl = getUrl;
+    }
+
+    public String getGetUrl() {
+        return getUrl;
+    }
 }

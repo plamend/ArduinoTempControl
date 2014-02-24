@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Adapters.feedsAdapter;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.R;
 
@@ -50,6 +51,8 @@ public class ToolsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main,container,false);
         this.list = (ListView)view.findViewById(R.id.list);
+        feedsAdapter adapter = new feedsAdapter(getActivity(),feedlist);
+        this.list.setAdapter(adapter);
            Log.v("done", "Done");
 
         return view;
