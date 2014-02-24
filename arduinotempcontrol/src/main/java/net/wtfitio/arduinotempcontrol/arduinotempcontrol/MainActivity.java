@@ -2,7 +2,9 @@ package net.wtfitio.arduinotempcontrol.arduinotempcontrol;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -27,30 +29,37 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     List<inputObject>inputList ;
     List<feedObject> feedsList;
     inputListAdapter inputadapter;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.inputList=new ArrayList<inputObject>();
         this.feedsList = new ArrayList<feedObject>();
+        this.preferences = this.getSharedPreferences("Setings",MODE_PRIVATE);
+        String server_tmp = preferences.getString("server","");
+        String apikey_temp = preferences.getString("apikey","");
 
-        if (savedInstanceState == null) {
-
+        if(server_tmp.equals("")&&apikey_temp.equals("")){
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new FirstLoginSet())
                     .commit();
+        }
+        else{
+            httprequestfeedslist();
+        }
 
 
-
-
+        if (savedInstanceState == null) {
 
 
         }
     }
     private void httprequestinputlist(){
+        getServer();
 
-        ServerInterfaceCom http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/", "input", null, null, null, "f8e040407f8b595df79322fa883641fd");
 
+        ServerInterfaceCom http = new ServerInterfaceCom(getServer(), "input", null, null, null, getApiKey());
         http.getInputList(new ServerInterface.InputListcallback() {
             @Override
             public void onSuccess(List<inputObject> input) {
@@ -69,9 +78,24 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
 
     }
+
+    private String getServer() {
+        String server;
+
+       server= preferences.getString("server","http://cms.wtfitio.net/emoncms/");
+        return server;
+    }
+
+    private String getApiKey() {
+        String apikey;
+
+        apikey= preferences.getString("apikey","");
+        return apikey;
+    }
+
     private void httprequestfeedslist() {
-        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed",null,null,null,"f8e040407f8b595df79322fa883641fd");
-        this.http.getFeedsList(new ServerInterface.FeedsListcallback(){
+        this.http = new ServerInterfaceCom(getServer(),"feed",null,null,null,getApiKey());
+        this.http.getFeedsList(new ServerInterface.FeedsListcallback() {
             @Override
             public void onSuccess(List<feedObject> feed) {
                 addToVarFeed(feed);
@@ -85,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         });
     }
     private void httprecuest(String feedid) {
-        this.http = new ServerInterfaceCom("http://cms.wtfitio.net/emoncms/","feed",feedid,null,null,"f8e040407f8b595df79322fa883641fd");
+        this.http = new ServerInterfaceCom(getServer(),"feed",feedid,null,null,getApiKey());
         this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
             @Override
             public void onSuccess(String value) {
@@ -141,7 +165,10 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     @Override
     public void firstLoginSetonContinueClicked(String server, String api) {
-
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("server",server);
+        editor.putString("apikey",api);
+        editor.commit();
 
        // httprecuest("7");
 
@@ -157,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     private void CallMainScree(List<feedObject> feedsList) {
         ToolsListFragment toolsfragment=ToolsListFragment.getinstance(feedsList);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,toolsfragment).commit();
-        Log.v("done","main screen Srated");
+        Log.v("done", "main screen Srated");
     }
 }
 
