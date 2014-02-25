@@ -15,17 +15,17 @@ public interface ServerInterface {
 
     public interface InputListcallback {
         void onSuccess(List<inputObject> input);
-        void onFailure(String message, Throwable cause);
+        void onFailure(byte[] message, Throwable cause);
     }
 
     public interface FeedsListcallback {
         void onSuccess(List<feedObject> feed);
-        void onFailure(String message, Throwable cause);
+        void onFailure(byte[] message, Throwable cause);
     }
 
     public interface FeedValumecallback {
         void onSuccess(String value);
-        void onFailure(String message, Throwable cause);
+        void onFailure(byte[] message, Throwable cause);
     }
 
 }

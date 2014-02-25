@@ -1,6 +1,7 @@
 package net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.Implemet;
 
 import android.net.Uri;
+import android.support.v7.appcompat.R;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -8,6 +9,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.MainActivity;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
 
 import org.apache.http.Header;
@@ -81,7 +83,8 @@ public class ServerInterfaceCom implements ServerInterface {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                super.onFailure(statusCode, headers, responseBody, error);
+
+                callback.onFailure(responseBody,error);
             }
         });
 
@@ -153,7 +156,8 @@ public class ServerInterfaceCom implements ServerInterface {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-              Log.v("error","0");
+
+                callback.onFailure(responseBody,error);
             }
         });
     }
@@ -193,7 +197,8 @@ public class ServerInterfaceCom implements ServerInterface {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                super.onFailure(statusCode, headers, responseBody, error);
+
+                callback.onFailure(responseBody,error);
             }
         });
 

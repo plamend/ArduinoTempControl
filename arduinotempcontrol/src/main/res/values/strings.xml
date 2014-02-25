@@ -9,5 +9,10 @@
     <string name="button_continue">Continue</string>
     <string name="first_set_error">Enter info in all lines!</string>
     <string name="feed_id">ID:</string>
+    <string name="fragment_settings_server">Server:</string>
+    <string name="fragment_settings_api">ApiKey</string>
+    <string name="fragment_settings_savereload">Save and Reload</string>
+    <string name="no_internet">Data connection not available!</string>
+    <string name="connection_problem">"Connection problem: "</string>
 
 </resources>

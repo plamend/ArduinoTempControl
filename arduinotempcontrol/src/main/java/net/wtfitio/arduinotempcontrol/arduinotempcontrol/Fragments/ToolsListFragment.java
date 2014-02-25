@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,6 +24,7 @@ public class ToolsListFragment extends Fragment {
     private onItemClick onItemClick;
     ListView list;
     static List<feedObject> feedlist;
+
    public interface onItemClick {
         void toolsFragmentItemSelected(int position);
     }
@@ -53,6 +55,12 @@ public class ToolsListFragment extends Fragment {
         this.list = (ListView)view.findViewById(R.id.list);
         feedsAdapter adapter = new feedsAdapter(getActivity(),feedlist);
         this.list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onItemClick.toolsFragmentItemSelected(position);
+            }
+        });
            Log.v("done", "Done");
 
         return view;
