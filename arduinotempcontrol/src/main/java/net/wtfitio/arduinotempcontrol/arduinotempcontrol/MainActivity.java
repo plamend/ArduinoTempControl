@@ -14,6 +14,7 @@ import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.FirstLoginSet;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.SettingsFragment;
+import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.StatisticFragment;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Fragments.ToolsListFragment;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.Implemet.ServerInterfaceCom;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface;
@@ -21,7 +22,7 @@ import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Service.ServerInterface
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements ToolsListFragment.onItemClick,FirstLoginSet.onContinueClickListener,SettingsFragment.OnSaveandReloadClick {
+public class MainActivity extends ActionBarActivity implements ToolsListFragment.onItemClick,FirstLoginSet.onContinueClickListener,SettingsFragment.OnSaveandReloadClick,StatisticFragment.transferInformation {
     private ServerInterface http;
     List<inputObject>inputList ;
     List<feedObject> feedsList;
@@ -192,9 +193,28 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     @Override
     public void toolsFragmentItemSelected(int position) {
-
+        inputObject temp_set_max_value=null;
+        inputObject temp_set_relay=null;
         feedObject temp_feed = feedsList.get(position);
+
+        int temp_feed_id = temp_feed.getId();
+        String temp_feed_tag = temp_feed.getTag();
+        for ( inputObject input:inputList){
+            if(input.getName().equals(temp_feed_tag)){
+                temp_set_max_value=input;
+            }
+            if(input.getDescription().equals(temp_feed_tag)){
+                temp_set_relay=input;
+            }
+
+        }
         Log.v("feedname",temp_feed.getName());
+        StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment).addToBackStack(null)
+                .commit();
+
+
 
     }
 
@@ -231,6 +251,16 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         editor.putString("server",server);
         editor.putString("apikey",api);
         editor.commit();
+    }
+
+    @Override
+    public void StatisticsRelayOnOff() {
+
+    }
+
+    @Override
+    public void StatisticsreferentValueSet() {
+
     }
 }
 

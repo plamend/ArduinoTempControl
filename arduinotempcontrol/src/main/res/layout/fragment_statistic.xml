@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true">
+
+    <WebView
+        android:id="@+id/stat_web_view"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:id="@+id/stat_textview1"
+        android:layout_below="@id/stat_web_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_current_value"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        />
+    <TextView
+        android:id="@+id/stat_current_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_below="@id/stat_web_view"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/stat_textview1"
+        android:layout_marginStart="10dp"/>
+
+    <RelativeLayout
+        android:id="@+id/stat_editable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stat_textview1"
+        android:layout_marginTop="20dp"
+
+        >
+        <TextView
+            android:id="@+id/stat_textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/stat_referent_value"
+            />
+        <EditText
+            android:id="@+id/stat_maxvalue_edit"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/stat_textview2"
+            android:layout_marginLeft="10dp"/>
+        <Button
+            android:id="@+id/stat_save_maxvalue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/stat_maxvalue_edit"
+            android:layout_marginLeft="10dp"
+            android:text="@string/stat_save_button"/>
+
+        <TextView
+            android:id="@+id/stat_textview3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/stat_relay_onoff"
+            android:layout_below="@id/stat_textview2"
+            android:layout_marginTop="35dp"/>
+
+        <ToggleButton
+            android:id="@+id/stat_onoff_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/stat_textview3"
+            android:layout_marginTop="45dp"
+            android:layout_marginLeft="10dp"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

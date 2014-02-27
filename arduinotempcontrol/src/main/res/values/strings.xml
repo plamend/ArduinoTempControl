@@ -14,5 +14,9 @@
     <string name="fragment_settings_savereload">Save and Reload</string>
     <string name="no_internet">Data connection not available!</string>
     <string name="connection_problem">"Connection problem: "</string>
+    <string name="stats_current_value">Current Value:</string>
+    <string name="stat_save_button">Save</string>
+    <string name="stat_referent_value">Set referent value:</string>
+    <string name="stat_relay_onoff">Relay On/Off</string>
 
 </resources>
