@@ -28,6 +28,9 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     List<feedObject> feedsList;
     inputListAdapter inputadapter;
     SharedPreferences preferences;
+    inputObject temp_set_max_value=null;
+    inputObject temp_set_relay=null;
+    feedObject  temp_set_maxfeed = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,8 +196,9 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     @Override
     public void toolsFragmentItemSelected(int position) {
-        inputObject temp_set_max_value=null;
-        inputObject temp_set_relay=null;
+        temp_set_relay=null;
+        temp_set_max_value=null;
+        temp_set_maxfeed =null;
         feedObject temp_feed = feedsList.get(position);
 
         int temp_feed_id = temp_feed.getId();
@@ -208,8 +212,13 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             }
 
         }
+        for(feedObject feed:feedsList){
+            if(feed.getName().equals(temp_feed.getTag())){
+                temp_set_maxfeed=feed;
+            }
+        }
         Log.v("feedname",temp_feed.getName());
-        StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id);
+        StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id,temp_set_relay,temp_set_max_value,temp_set_maxfeed);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment).addToBackStack(null)
                 .commit();
