@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.feedObject;
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Classes.inputObject;
@@ -24,13 +27,18 @@ public class StatisticFragment extends android.support.v4.app.Fragment {
     private static String SET_MAX_VALUE = "set_max_value";
     private static String SET_RELAY = "set_relay";
     private static String SET_MAXFEED="set_maxfeed";
-    public static StatisticFragment getInstance(int temp_feed_id, inputObject temp_set_relay, inputObject temp_set_max_value, feedObject temp_set_maxfeed){
+    private static String CURRENT_VALUE="current_value";
+    private static String VALUE_TO_SET = "value_to_set";
+
+    public static StatisticFragment getInstance(int temp_feed_id, inputObject temp_set_relay, inputObject temp_set_max_value, feedObject temp_set_maxfeed, String temp_feed_value_toshow0,String temp_feed_value_toshow1){
         StatisticFragment fragment = new StatisticFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(FEED_ID, temp_feed_id);
         bundle.putSerializable(SET_RELAY, temp_set_relay);
         bundle.putSerializable(SET_MAXFEED,temp_set_maxfeed);
         bundle.putSerializable(SET_MAX_VALUE,temp_set_max_value);
+        bundle.putString(CURRENT_VALUE, temp_feed_value_toshow0);
+        bundle.putString(VALUE_TO_SET,temp_feed_value_toshow1);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -63,10 +71,16 @@ public class StatisticFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_statistic,container,false);
         RelativeLayout stat_editable = (RelativeLayout) view.findViewById(R.id.stat_editable);
         WebView web_view = (WebView)view.findViewById(R.id.stat_web_view);
+        TextView stat_current_value=(TextView)view.findViewById(R.id.stat_current_value_view);
+        EditText stat_max_value_edit = (EditText) view.findViewById(R.id.stat_maxvalue_edit);
         web_view.getSettings().setJavaScriptEnabled(true);
         web_view.loadUrl("http://cms.wtfitio.net/emoncms/vis/rawdata&feedid="+feed_id+"&fill=0&units=C&embed=1");
+        stat_current_value.setText(arguments.getString(CURRENT_VALUE));
+        stat_max_value_edit.setText(arguments.getString(VALUE_TO_SET));
         if(set_max_value==null&&set_relay==null){
             stat_editable.setVisibility(View.GONE);
+
+            Log.v("test","test");
         }
 
         return view;

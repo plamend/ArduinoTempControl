@@ -30,8 +30,12 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     SharedPreferences preferences;
     inputObject temp_set_max_value=null;
     inputObject temp_set_relay=null;
-    feedObject  temp_set_maxfeed = null;
-    String[] tem_feed_value_toreturn=null;
+    feedObject  temp_get_maxfeed = null;
+    String temp_feed_value_toshow0;
+    String temp_feed_value_toshow1;
+    int   temp_feed_id;
+    boolean secon_value_toget=false;
+    boolean getvalue_secondrun = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,14 +145,64 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         Toast.makeText(this, new StringBuilder().append(getString(R.string.connection_problem)).append(msg).append(" ").append(cause).toString(),Toast.LENGTH_LONG).show();
     }
 
-    private void httprecuest(String feedid) {
-        this.http = new ServerInterfaceCom(getServer(),"feed",feedid,null,null,getApiKey());
+    private void httprecuest(final feedObject feedid) {
+
+        this.http = new ServerInterfaceCom(getServer(),"feed",String.valueOf(feedid.getId()),null,null,getApiKey());
 
         this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
             @Override
             public void onSuccess(String value) {
-               // tem_feed_value_toreturn[0]=value;
-                Log.v("outputjjjjjjjj", value);
+
+
+
+                if(secon_value_toget){
+                    getvalue_secondrun=true;
+                    secon_value_toget=false;
+                }
+                if(!getvalue_secondrun){
+                temp_feed_id = feedid.getId();
+                String temp_feed_tag = feedid.getTag();
+                for (inputObject input : inputList) {
+                    if (input.getName().equals(temp_feed_tag)) {
+                        temp_set_max_value = input;
+                    }
+                    if (input.getDescription().equals(temp_feed_tag)) {
+                        temp_set_relay = input;
+                    }
+
+                }
+
+                for (feedObject feed : feedsList) {
+                    if (feed.getName().equals(feedid.getTag())) {
+                        temp_get_maxfeed = feed;
+                        secon_value_toget = true;
+
+
+                    }
+                }
+
+                }
+                    if(secon_value_toget){
+                    temp_feed_value_toshow0 = value;
+                    getvalue_secondrun=true;
+                    httprecuest(temp_get_maxfeed);
+                    }
+                    else{
+                     if(!getvalue_secondrun){
+                    temp_feed_value_toshow0 = value;
+                     }
+                        else{
+                         temp_feed_value_toshow1 = value;
+
+                     }
+                    StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, fragment).addToBackStack(null)
+                            .commit();
+
+                    }
+
+
             }
 
             @Override
@@ -203,33 +257,20 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     public void toolsFragmentItemSelected(int position) {
         temp_set_relay=null;
         temp_set_max_value=null;
-        temp_set_maxfeed =null;
+        temp_get_maxfeed =null;
+        temp_feed_id=0;
+        getvalue_secondrun=false;
+        secon_value_toget=false;
+        temp_feed_value_toshow0=null;
+        temp_feed_value_toshow1=null;
         feedObject temp_feed = feedsList.get(position);
 
-
-
-        int temp_feed_id = temp_feed.getId();
-        httprecuest(String.valueOf(temp_feed_id));
-        String temp_feed_tag = temp_feed.getTag();
-        for ( inputObject input:inputList){
-            if(input.getName().equals(temp_feed_tag)){
-                temp_set_max_value=input;
-            }
-            if(input.getDescription().equals(temp_feed_tag)){
-                temp_set_relay=input;
-            }
-
-        }
-        for(feedObject feed:feedsList){
-            if(feed.getName().equals(temp_feed.getTag())){
-                temp_set_maxfeed=feed;
-            }
-        }
+        httprecuest(temp_feed);
         Log.v("feedname",temp_feed.getName());
-        StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id,temp_set_relay,temp_set_max_value,temp_set_maxfeed);
+       /* StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id,temp_set_relay,temp_set_max_value,temp_get_maxfeed, temp_feed_value_toshow);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment).addToBackStack(null)
-                .commit();
+                .commit();*/
 
 
 
