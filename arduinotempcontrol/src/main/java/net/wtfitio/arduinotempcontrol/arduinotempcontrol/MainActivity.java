@@ -31,6 +31,8 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     inputObject temp_set_max_value=null;
     inputObject temp_set_relay=null;
     feedObject  temp_set_maxfeed = null;
+    String[] tem_feed_value_toreturn=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,17 +143,20 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     private void httprecuest(String feedid) {
         this.http = new ServerInterfaceCom(getServer(),"feed",feedid,null,null,getApiKey());
+
         this.http.getFeedValue(new ServerInterface.FeedValumecallback() {
             @Override
             public void onSuccess(String value) {
+               // tem_feed_value_toreturn[0]=value;
                 Log.v("outputjjjjjjjj", value);
             }
 
             @Override
             public void onFailure(byte[] message, Throwable cause) {
-                Log.v("outputjjjjjjjj", "erroro");
+                CheckErrorMEssage(message, cause);
             }
         });
+
     }
     private void addToVarFeed(List<feedObject> feed) {
         feedsList=feed;
@@ -201,7 +206,10 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         temp_set_maxfeed =null;
         feedObject temp_feed = feedsList.get(position);
 
+
+
         int temp_feed_id = temp_feed.getId();
+        httprecuest(String.valueOf(temp_feed_id));
         String temp_feed_tag = temp_feed.getTag();
         for ( inputObject input:inputList){
             if(input.getName().equals(temp_feed_tag)){
