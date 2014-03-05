@@ -212,6 +212,20 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         });
 
     }
+    private void httpinputreuest(String inputName,String inputValue){
+        this.http = new ServerInterfaceCom(getServer(),"input",null,inputName,inputValue,getApiKey());
+        this.http.setInputValue(new ServerInterfaceCom.inputValuecallback() {
+            @Override
+            public void onSuccess(String message) {
+              ShowErrorMEssage(getString(R.string.value_set),null);
+            }
+
+            @Override
+            public void onFailure(byte[] message, Throwable cause) {
+                CheckErrorMEssage(message, cause);
+            }
+        });
+    }
     private void addToVarFeed(List<feedObject> feed) {
         feedsList=feed;
     }
@@ -311,14 +325,15 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         editor.commit();
     }
 
-    @Override
-    public void StatisticsRelayOnOff() {
 
+    @Override
+    public void StatisticsRelayOnOff(String inputName, String inputValue) {
+        httpinputreuest(inputName,inputValue);
     }
 
     @Override
-    public void StatisticsreferentValueSet() {
-
+    public void StatisticsreferentValueSet(String inputName, String inputValue) {
+        httpinputreuest(inputName,inputValue);
     }
 }
 

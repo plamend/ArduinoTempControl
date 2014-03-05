@@ -126,7 +126,7 @@ public class ServerInterfaceCom implements ServerInterface {
             }
             else{
                 try {
-                    ub.appendPath("post.json?json="+ URLEncoder.encode("{" + inputName + ":" + inputValue + "}", "UTF-8"));
+                    ub.appendEncodedPath("post.json?json="+ URLEncoder.encode("{" + inputName + ":" + inputValue + "}", "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -190,7 +190,8 @@ public class ServerInterfaceCom implements ServerInterface {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                String out = new String(responseBody);
-                out=out.substring(1,3);
+                int out_count = out.length();
+                out=out.substring(1,out_count-1);
                 callback.onSuccess(out);
 
             }
@@ -202,5 +203,22 @@ public class ServerInterfaceCom implements ServerInterface {
             }
         });
 
+    }
+
+    @Override
+    public void setInputValue(final inputValuecallback callback) {
+        String url = buildURL(BASE_URL,action,feedid,inputName,inputValue,BASE_API);
+        this.client.get(url,null,new AsyncHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responce = new String(responseBody);
+                callback.onSuccess(responce);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                callback.onFailure(responseBody, error);
+            }
+        });
     }
 }

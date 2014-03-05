@@ -12,6 +12,7 @@ public interface ServerInterface {
     void getInputList(InputListcallback callback);
     void getFeedsList(FeedsListcallback callback);
     void getFeedValue(FeedValumecallback callback);
+    void setInputValue(inputValuecallback callback);
 
     public interface InputListcallback {
         void onSuccess(List<inputObject> input);
@@ -25,6 +26,10 @@ public interface ServerInterface {
 
     public interface FeedValumecallback {
         void onSuccess(String value);
+        void onFailure(byte[] message, Throwable cause);
+    }
+    public interface inputValuecallback{
+        void onSuccess(String message);
         void onFailure(byte[] message, Throwable cause);
     }
 

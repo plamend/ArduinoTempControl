@@ -18,5 +18,7 @@
     <string name="stat_save_button">Save</string>
     <string name="stat_referent_value">Set referent value:</string>
     <string name="stat_relay_onoff">Relay On/Off</string>
-
+    <string name="value_set">Value set!</string>
+    <string name="value_empty">Value cannot be empty!</string>
+    <string name="between_0_100">Enter value between 0 and 100!</string>
 </resources>
