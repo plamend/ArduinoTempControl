@@ -142,7 +142,14 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     }
 
     private void ShowErrorMEssage(String msg, Throwable cause) {
+        if(cause==null){
+         Toast.makeText(this, msg,Toast.LENGTH_LONG).show();
+
+        }
+        else{
         Toast.makeText(this, new StringBuilder().append(getString(R.string.connection_problem)).append(msg).append(" ").append(cause).toString(),Toast.LENGTH_LONG).show();
+
+        }
     }
 
     private void httprecuest(final feedObject feedid) {

@@ -21,4 +21,5 @@
     <string name="value_set">Value set!</string>
     <string name="value_empty">Value cannot be empty!</string>
     <string name="between_0_100">Enter value between 0 and 100!</string>
+    <string name="refresh">Refresh</string>
 </resources>
