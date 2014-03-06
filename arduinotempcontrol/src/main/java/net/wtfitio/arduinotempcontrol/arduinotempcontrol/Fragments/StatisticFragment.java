@@ -122,7 +122,10 @@ public class StatisticFragment extends android.support.v4.app.Fragment {
                    }
                    else{
 
+
+                       stat_max_value_edit.clearFocus();
                        referentvalueset(temp_max_value);
+
                    }
                }
             }

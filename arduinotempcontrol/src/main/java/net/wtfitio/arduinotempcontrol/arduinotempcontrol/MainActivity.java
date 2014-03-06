@@ -33,9 +33,13 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     feedObject  temp_get_maxfeed = null;
     String temp_feed_value_toshow0;
     String temp_feed_value_toshow1;
+    ProgressDialog pd;
     int   temp_feed_id;
+    int FragmentItemSelectedposition=0;
     boolean secon_value_toget=false;
     boolean getvalue_secondrun = false;
+    boolean inRefresh=false;
+    StatisticFragment statFragment=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +68,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     }
     private void httprequestinputlist(){
         ServerInterfaceCom http = new ServerInterfaceCom(getServer(), "input", null, null, null, getApiKey());
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setTitle("Processing inputs...");
-        pd.setMessage("Please wait.");
-        pd.setCancelable(false);
-        pd.setIndeterminate(true);
+        pd = getProgressDialog("Processing inputs...");
         pd.show();
         http.getInputList(new ServerInterface.InputListcallback() {
             @Override
@@ -91,6 +91,15 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     }
 
+    private ProgressDialog getProgressDialog(String s) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle(s);
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.setIndeterminate(true);
+        return pd;
+    }
+
     private String getServer() {
         String server;
 
@@ -107,11 +116,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     private void httprequestfeedslist() {
         this.http = new ServerInterfaceCom(getServer(),"feed",null,null,null,getApiKey());
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setTitle("Processing feeds...");
-        pd.setMessage("Please wait.");
-        pd.setCancelable(false);
-        pd.setIndeterminate(true);
+        pd = getProgressDialog("Processing feeds...");
         pd.show();
         this.http.getFeedsList(new ServerInterface.FeedsListcallback() {
             @Override
@@ -202,10 +207,23 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
                          temp_feed_value_toshow1 = value;
 
                      }
-                    StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, fragment).addToBackStack(null)
+                        pd.dismiss();
+                        if(!inRefresh){
+                            statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
+                         getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, statFragment).addToBackStack(null)
                             .commit();
+                        }
+                        else{
+                            inRefresh=false;
+                            getSupportFragmentManager().beginTransaction().remove(statFragment).commit();
+                            getSupportFragmentManager().popBackStack();
+                            statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.container, statFragment).addToBackStack(null)
+                                    .commit();
+
+                        }
 
                     }
 
@@ -263,6 +281,11 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             CallSettings(getServer(),getApiKey());
             return true;
         }
+        if(id==R.id.stat_menu_refresh){
+            inRefresh=true;
+            getFeedsInfo(FragmentItemSelectedposition);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -276,6 +299,19 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     @Override
     public void toolsFragmentItemSelected(int position) {
+        FragmentItemSelectedposition=position;
+        getFeedsInfo(position);
+       /* StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id,temp_set_relay,temp_set_max_value,temp_get_maxfeed, temp_feed_value_toshow);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment).addToBackStack(null)
+                .commit();*/
+
+
+
+    }
+
+    private void getFeedsInfo(int position){
+
         temp_set_relay=null;
         temp_set_max_value=null;
         temp_get_maxfeed =null;
@@ -284,17 +320,12 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         secon_value_toget=false;
         temp_feed_value_toshow0=null;
         temp_feed_value_toshow1=null;
-        feedObject temp_feed = feedsList.get(position);
 
+        feedObject temp_feed = feedsList.get(position);
+        pd = getProgressDialog("Processing Statistic information...");
+        pd.show();
         httprecuest(temp_feed);
         Log.v("feedname",temp_feed.getName());
-       /* StatisticFragment fragment = StatisticFragment.getInstance(temp_feed_id,temp_set_relay,temp_set_max_value,temp_get_maxfeed, temp_feed_value_toshow);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment).addToBackStack(null)
-                .commit();*/
-
-
-
     }
 
 
