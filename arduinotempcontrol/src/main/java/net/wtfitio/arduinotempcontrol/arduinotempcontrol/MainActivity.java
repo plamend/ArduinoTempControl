@@ -2,6 +2,7 @@ package net.wtfitio.arduinotempcontrol.arduinotempcontrol;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     boolean inRefresh=false;
     StatisticFragment statFragment=null;
 
+    private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,8 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
 
         }
+
+        this.handler = new Handler();
     }
     private void httprequestinputlist(){
         ServerInterfaceCom http = new ServerInterfaceCom(getServer(), "input", null, null, null, getApiKey());
@@ -287,6 +292,19 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshInfo() {
+        this.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // do logic
+
+                handler.postDelayed(this, 1000);
+            }
+        }, 60 * 1000);
+
+
     }
 
     private void CallSettings(String server, String apiKey) {
