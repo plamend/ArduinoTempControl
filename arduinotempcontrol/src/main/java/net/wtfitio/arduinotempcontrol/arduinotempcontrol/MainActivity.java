@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import net.wtfitio.arduinotempcontrol.arduinotempcontrol.Adapters.inputListAdapter;
@@ -41,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     boolean getvalue_secondrun = false;
     boolean inRefresh=false;
     StatisticFragment statFragment=null;
+    FrameLayout second_container;
+    boolean dualPlane;
 
     private Handler handler;
 
@@ -53,11 +56,21 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         this.preferences = this.getSharedPreferences("Setings",MODE_PRIVATE);
         String server_tmp = preferences.getString("server","");
         String apikey_temp = preferences.getString("apikey","");
-
+        this.second_container = (FrameLayout) findViewById(R.id.second_container);
+        if(second_container!=null){
+            dualPlane=true;
+        }
         if(server_tmp.equals("")&&apikey_temp.equals("")){
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new FirstLoginSet())
-                    .commit();
+            if(dualPlane){
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.second_container, new FirstLoginSet())
+                        .commit();
+            }
+            else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new FirstLoginSet())
+                        .commit();
+            }
         }
         else{
             httprequestfeedslist();
@@ -215,18 +228,34 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
                         pd.dismiss();
                         if(!inRefresh){
                             statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
-                         getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, statFragment).addToBackStack(null)
-                            .commit();
+                            if(dualPlane){
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.second_container, statFragment).addToBackStack(null)
+                                        .commit();
+                            }
+                            else{
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.container, statFragment).addToBackStack(null)
+                                        .commit();
+                            }
+
                         }
                         else{
                             inRefresh=false;
                             getSupportFragmentManager().beginTransaction().remove(statFragment).commit();
                             getSupportFragmentManager().popBackStack();
                             statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.container, statFragment).addToBackStack(null)
-                                    .commit();
+                           if(dualPlane){
+                               getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.second_container, statFragment).addToBackStack(null)
+                                       .commit();
+                           }
+                            else{
+                               getSupportFragmentManager().beginTransaction()
+                                       .replace(R.id.container, statFragment).addToBackStack(null)
+                                       .commit();
+                           }
+
 
                         }
 
@@ -309,9 +338,17 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     private void CallSettings(String server, String apiKey) {
         SettingsFragment fragment = SettingsFragment.getInstance(server,apiKey);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment).addToBackStack(null)
-                .commit();
+        if(dualPlane){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.second_container, fragment).addToBackStack(null)
+                    .commit();
+        }
+        else{
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment).addToBackStack(null)
+                    .commit();
+        }
+
     }
 
 
