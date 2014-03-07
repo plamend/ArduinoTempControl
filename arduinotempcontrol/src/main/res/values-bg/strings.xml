@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ArduinoTempControl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Настройки</string>
+    <string name="set_server">Въведете адрес на сървъра!</string>
+    <string name="set_api">Въведете API ключ</string>
+    <string name="button_continue">Продължи</string>
+    <string name="first_set_error">Попълнете всички редове!</string>
+    <string name="feed_id">ID:</string>
+    <string name="fragment_settings_server">Сървър:</string>
+    <string name="fragment_settings_api">ApiКлюч</string>
+    <string name="fragment_settings_savereload">Запази и презареди</string>
+    <string name="no_internet">Връзката е невъзможна!</string>
+    <string name="connection_problem">"Проблем със свързването: "</string>
+    <string name="stats_current_value">Моментна стойност:</string>
+    <string name="stat_save_button">Запази</string>
+    <string name="stat_referent_value">Максимум:</string>
+    <string name="stat_relay_onoff">Реле пусни/спри</string>
+    <string name="value_set">Стойността е запазена!</string>
+    <string name="value_empty">Стойността не може да е празна!</string>
+    <string name="between_0_100">Стойност между 0 и 100!</string>
+    <string name="refresh">обнови</string>
+    <string name="please_wait">Моля изчакайте.</string>
+    <string name="procesing_input">Обработка на входовете</string>
+    <string name="procesing_feed">Обработна на източниците</string>
+    <string name="procesing_stat_info" >Обработка информация</string>
+    <string name="On">Пуснато</string>
+    <string name="Off">Спряно</string>
+</resources>

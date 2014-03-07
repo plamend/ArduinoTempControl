@@ -94,8 +94,8 @@ public class StatisticFragment extends android.support.v4.app.Fragment {
         this.stat_max_value_edit = (EditText) view.findViewById(R.id.stat_maxvalue_edit);
         Button set_max_value_button = (Button)view.findViewById(R.id.stat_save_maxvalue);
         final ToggleButton stat_onoff_button = (ToggleButton)view.findViewById(R.id.stat_onoff_button);
-        stat_onoff_button.setTextOn("On");
-        stat_onoff_button.setTextOff("Off");
+        stat_onoff_button.setTextOn(getString(R.string.On));
+        stat_onoff_button.setTextOff(getString(R.string.Off));
 
         web_view.getSettings().setJavaScriptEnabled(true);
         web_view.loadUrl("http://cms.wtfitio.net/emoncms/vis/rawdata&feedid="+feed_id+"&fill=0&units=C&embed=1");
@@ -140,11 +140,11 @@ public class StatisticFragment extends android.support.v4.app.Fragment {
         stat_onoff_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(stat_onoff_button.getText().toString().equals("On")){
+                if(stat_onoff_button.getText().toString().equals(getString(R.string.On))){
                     assert set_relay != null;
                     transferinformation.StatisticsRelayOnOff(set_relay.getName(),"1");
                 }
-                if(stat_onoff_button.getText().toString().equals("Off")){
+                if(stat_onoff_button.getText().toString().equals(getString(R.string.Off))){
                     assert set_relay != null;
                     transferinformation.StatisticsRelayOnOff(set_relay.getName(),"0");
                 }

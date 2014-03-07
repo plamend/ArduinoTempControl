@@ -44,6 +44,8 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     StatisticFragment statFragment=null;
     FrameLayout second_container;
     boolean dualPlane;
+    FirstLoginSet loginFragment;
+
 
     private Handler handler;
 
@@ -62,8 +64,9 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         }
         if(server_tmp.equals("")&&apikey_temp.equals("")){
             if(dualPlane){
+                 loginFragment= new FirstLoginSet();
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.second_container, new FirstLoginSet())
+                        .add(R.id.second_container,loginFragment)
                         .commit();
             }
             else {
@@ -86,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     }
     private void httprequestinputlist(){
         ServerInterfaceCom http = new ServerInterfaceCom(getServer(), "input", null, null, null, getApiKey());
-        pd = getProgressDialog("Processing inputs...");
+        pd = getProgressDialog(getString(R.string.procesing_input));
         pd.show();
         http.getInputList(new ServerInterface.InputListcallback() {
             @Override
@@ -112,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
     private ProgressDialog getProgressDialog(String s) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle(s);
-        pd.setMessage("Please wait.");
+        pd.setMessage(getString(R.string.please_wait));
         pd.setCancelable(false);
         pd.setIndeterminate(true);
         return pd;
@@ -134,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
 
     private void httprequestfeedslist() {
         this.http = new ServerInterfaceCom(getServer(),"feed",null,null,null,getApiKey());
-        pd = getProgressDialog("Processing feeds...");
+        pd = getProgressDialog(getString(R.string.procesing_feed));
         pd.show();
         this.http.getFeedsList(new ServerInterface.FeedsListcallback() {
             @Override
@@ -229,6 +232,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
                         if(!inRefresh){
                             statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
                             if(dualPlane){
+                                getSupportFragmentManager().popBackStack();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.second_container, statFragment).addToBackStack(null)
                                         .commit();
@@ -246,6 +250,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
                             getSupportFragmentManager().popBackStack();
                             statFragment = StatisticFragment.getInstance(temp_feed_id, temp_set_relay, temp_set_max_value, temp_get_maxfeed, temp_feed_value_toshow0,temp_feed_value_toshow1);
                            if(dualPlane){
+
                                getSupportFragmentManager().beginTransaction()
                                        .replace(R.id.second_container, statFragment).addToBackStack(null)
                                        .commit();
@@ -377,7 +382,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         temp_feed_value_toshow1=null;
 
         feedObject temp_feed = feedsList.get(position);
-        pd = getProgressDialog("Processing Statistic information...");
+        pd = getProgressDialog(getString(R.string.procesing_stat_info));
         pd.show();
         httprecuest(temp_feed);
         Log.v("feedname",temp_feed.getName());
@@ -390,7 +395,7 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
         editor.putString("server",server);
         editor.putString("apikey",api);
         editor.commit();
-
+        getSupportFragmentManager().beginTransaction().remove(loginFragment).commit();
        // httprecuest("7");
 
         httprequestfeedslist();
