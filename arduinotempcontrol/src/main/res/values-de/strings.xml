@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ArduinoTempControl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="set_server">Geben Sie, bitte ein Address auf den Server</string>
+    <string name="set_api">Geben Sie, bitte ein API Schluss</string>
+    <string name="button_continue">Fortsetzen</string>
+    <string name="first_set_error">Füllen Sie alle Zeilen!</string>
+    <string name="feed_id">ID:</string>
+    <string name="fragment_settings_server">Server:</string>
+    <string name="fragment_settings_api">api Key:</string>
+    <string name="fragment_settings_savereload">Speichern und laden</string>
+    <string name="no_internet">Ist nicht möglich!</string>
+    <string name="connection_problem">"Problem bei der Verbindung:"</string>
+    <string name="stats_current_value">Momentanwert:</string>
+    <string name="stat_save_button">Speichern</string>
+    <string name="stat_referent_value">Maximum:</string>
+    <string name="stat_relay_onoff">Relay Play/Stop</string>
+    <string name="value_set">Der Wert wird gespeichert!</string>
+    <string name="value_empty">Der Wert darf nicht leer sein!</string>
+    <string name="between_0_100">Wert zwischen 0 und 100!</string>
+    <string name="refresh">Aktualisierung</string>
+    <string name="please_wait">Bitte warten Sie.</string>
+    <string name="procesing_input">Verarbeitung der Eingänge</string>
+    <string name="procesing_feed">Quellenverarbeitung</string>
+    <string name="procesing_stat_info" >Informationsverarbeitung</string>
+    <string name="On">Verfasst</string>
+    <string name="Off">Gestoppt</string>
+</resources>

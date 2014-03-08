@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ArduinoTempControl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Configuración</string>
+    <string name="set_server">Introducir la dirección del servidor!</string>
+    <string name="set_api">Introducir API clave</string>
+    <string name="button_continue">Seguir</string>
+    <string name="first_set_error">Introducir información en todas las líneas</string>
+    <string name="feed_id">ID:</string>
+    <string name="fragment_settings_server">Servidor:</string>
+    <string name="fragment_settings_api">API clave</string>
+    <string name="fragment_settings_savereload">Guardar y recargar</string>
+    <string name="no_internet">Conexión de datos no disponible!</string>
+    <string name="connection_problem">"Problema de conexión: "</string>
+    <string name="stats_current_value">Valor actual:</string>
+    <string name="stat_save_button">Guardar</string>
+    <string name="stat_referent_value">máximo:</string>
+    <string name="stat_relay_onoff">relé activar/desactivar</string>
+    <string name="value_set">Valor establecido!</string>
+    <string name="value_empty">El valor no puede estar vacío!</string>
+    <string name="between_0_100">Introducir Valor entre 0 y 100!</string>
+    <string name="refresh">Refrescar</string>
+    <string name="please_wait">Esperar, por favor</string>
+    <string name="procesing_input">Insumos de procesamiento</string>
+    <string name="procesing_feed">Procesamiento de fuentes</string>
+    <string name="procesing_stat_info" >Procesamiento de la información Estadística</string>
+    <string name="On">Activar</string>
+    <string name="Off">Deasactivar</string>
+</resources>
