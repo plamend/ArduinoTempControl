@@ -17,6 +17,8 @@ import net.wtfitio.arduinotempcontrol.arduinotempcontrol.R;
 
 import java.util.List;
 
+import static android.R.color.*;
+
 /**
  * Created by plamend on 2/17/14.
  */
@@ -58,6 +60,7 @@ public class ToolsListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 onItemClick.toolsFragmentItemSelected(position);
             }
         });

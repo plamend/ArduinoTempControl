@@ -70,8 +70,9 @@ public class MainActivity extends ActionBarActivity implements ToolsListFragment
                         .commit();
             }
             else {
+                loginFragment= new FirstLoginSet();
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new FirstLoginSet())
+                        .add(R.id.container, loginFragment)
                         .commit();
             }
         }
